@@ -1,2 +1,22 @@
-/docs/
+node_modules/
+.npm-cache/
+**/dist/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+**/*.db
+**/*.db-*
+**/*.sqlite
+**/*.sqlite-*
+coverage/
+playwright-report/
+test-results/
+/tmp/
 /.impeccable/
+# Publish only rewritten project documentation, never source PDFs.
+/docs/*
+!/docs/*.md
+!/docs/adr/
+/docs/adr/*
+!/docs/adr/*.md
