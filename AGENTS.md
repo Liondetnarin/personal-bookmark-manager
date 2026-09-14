@@ -7,7 +7,8 @@ The rewritten docs are the project spec. Do not use or publish the source PDF.
 
 ## Learning boundary
 Step 1 scaffolding is complete. The developer reported successful browser login on 2026-09-15.
-Step 3 Collections CRUD API and tests are implemented. Review the ownership lesson with the developer before the Bookmark exercise.
+Step 3 Collections CRUD and its review are committed as eef2562. Ownership, uniqueness and scoped totals were discussed with the developer.
+Step 4 starts with docs/bookmark-exercise.md: the developer writes bookmarkTitle; review their implementation before advancing.
 The developer practices Bookmarks; do not implement that exercise on their
 behalf without an explicit request. Explain each small change and its evidence.
 The user has approved the plan; do not reopen settled choices.

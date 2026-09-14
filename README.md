@@ -18,4 +18,4 @@ npm.cmd run dev
 
 ตรวจด้วย `npm.cmd run check`, `npm.cmd test` และ `npm.cmd run smoke` ชุดทดสอบ backend ผ่าน 32 รายการ ใช้ signed test tokens, JWKS server และ SQLite แยกจากข้อมูลจริง ส่วน smoke ตรวจ startup/HTTP เท่านั้น ผล login จริงเป็นรายงานจากผู้พัฒนา ไม่ใช่การตรวจ browser โดย agent
 
-อ่าน [บทเรียน Authentication](docs/authentication.md) และ [บทเรียน Collections](docs/collections.md) แล้วลองอธิบายว่า API บังคับเจ้าของข้อมูลตรงไหน ก่อนเริ่มแบบฝึก Bookmarks
+อ่าน [บทเรียน Authentication](docs/authentication.md), [บทเรียน Collections](docs/collections.md) และ [ผลตรวจข้อมูล/ความปลอดภัย](docs/reviews/2026-09-15-auth-collections.md) ขั้นถัดไปเริ่มที่ [แบบฝึก Bookmarks](docs/bookmark-exercise.md) โดยผู้พัฒนาเขียนฟังก์ชันตรวจ title ก่อน

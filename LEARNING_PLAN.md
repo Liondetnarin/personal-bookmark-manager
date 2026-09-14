@@ -1,6 +1,6 @@
 # แผนลงมือเรียนรู้ — ยืนยันแล้วใน Q15
 
-สถานะล่าสุด 2026-09-15: ผู้พัฒนายืนยันว่าลอง login สำเร็จแล้ว (รายงานจากผู้พัฒนา ไม่ใช่การสังเกต browser โดย agent) ขั้นที่ 3 มี Collection schema, CRUD API และ tests แล้ว ทบทวนบท ownership ก่อนเริ่มแบบฝึก Bookmarks ยังไม่มีหน้าจอ Collections หรือ Bookmark schema/routes การลบ Collection ที่มี Bookmarks และ nested route จะทำพร้อมบทความสัมพันธ์ภายหลัง
+สถานะล่าสุด 2026-09-15: ผู้พัฒนายืนยันว่า login สำเร็จ (รายงานจากผู้พัฒนา) และร่วมทบทวน owner scope, unique constraint และ scoped total แล้ว ตรวจข้อมูล/ความปลอดภัยและ commit Auth/Collections เป็น eef2562 เริ่มขั้นที่ 4 ที่ docs/bookmark-exercise.md โดยให้ผู้พัฒนาเขียน bookmarkTitle ก่อน ยังไม่มี Bookmark implementation หรือ UI การทบทวนบทสนทนาไม่ใช่หลักฐานว่าผู้พัฒนาทำแบบฝึกได้แล้ว
 
 ## สิ่งที่ยืนยันแล้ว
 

@@ -75,3 +75,7 @@ Tests รอบแรกของบท Collections ผ่านทั้งห�
 ผู้พัฒนาขอให้ตรวจข้อมูล/ความปลอดภัยก่อน commit แล้วไปขั้นถัดไป ใช้ code-review skill แยก Standards กับ Spec ในสอง reviewer โดยเทียบ working tree กับ fb7a884 พบข้อเสนอปรับ startup log และข้อความสถานะเก่าในแผนเรียนรู้ แก้ทั้งสองแล้ว Main agent ตรวจ SQLite แบบ read-only ได้ integrity ok และไม่พบ orphan/foreign-key violation/ชื่อซ้ำ/migration ค้าง
 
 npm audit พบ affected package entries ระดับ high 6 รายการ จึงอัปเดต Nest เป็น 12.0.2 และ scoped overrides ของ Prisma tooling ตามรายละเอียดใน docs/reviews/2026-09-15-auth-collections.md หลังแก้ npm audit เป็น 0, npm ls ไม่พบ invalid dependency, check/test/smoke/migration ผ่าน Tests เพิ่มเป็น 32 รายการ รวม regression ที่ไม่ให้ log ค่า env ที่ผิดรูปแบบ ไม่ใช้ audit 0 แทนข้ออ้างว่าระบบปลอดภัยทุกกรณี
+
+Commit eef2562 บันทึก Auth/Collections และผลตรวจแล้ว ก่อน commit สแกน staged files 43 ไฟล์ด้วยชื่อไฟล์ต้องห้าม, ค่าตั้ง Auth0 จริงที่ทราบจาก local env และรูปแบบ JWT/private key ไม่พบรายการตรงเงื่อนไข สแกนนี้มีขอบเขตตามกฎดังกล่าว ไม่ใช่การรับประกันว่าจะตรวจพบความลับทุกชนิด
+
+หลัง commit เริ่มขั้นที่ 4 ด้วย docs/bookmark-exercise.md ให้ผู้พัฒนาเขียน bookmarkTitle ด้วยตนเองจากตัวอย่าง Collections มีตารางผลคาดหวังและคำสั่ง typecheck แต่ยังไม่มีโค้ดหรือ tests ของ Bookmark และไม่กล่าวอ้างว่าผู้พัฒนาทำสำเร็จแล้ว
