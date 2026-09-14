@@ -15,7 +15,8 @@
     "typecheck": "npm run typecheck --workspaces",
     "build": "npm run build --workspaces",
     "check": "npm run typecheck && npm run build",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "auth:inspect": "node scripts/inspect-auth0.mjs"
   },
   "devDependencies": {
     "concurrently": "10.0.5",

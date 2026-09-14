@@ -60,6 +60,8 @@ Smoke check ไม่ใช่ automated tests ด้าน auth/privacy หร�
 
 ## Stack และขอบเขตถัดไป
 
+เริ่มบทถัดไปที่ [เตรียม Auth0 ของเราเอง](docs/auth0-setup.md) และใช้ npm.cmd run auth:inspect -- YOUR_TENANT.us.auth0.com เพื่ออ่าน public metadata ของ tenant ก่อน implementation คำสั่งนี้ไม่ใช่การทดสอบ auth
+
 ติดตั้งแล้ว: TypeScript 5.9.3, NestJS 12, React 19, Vite 8, React Router 8 และ MUI 9 เวอร์ชันที่ติดตั้งจริงล็อกใน package-lock.json เลือก TypeScript 5.9.3 เป็นฐานเริ่มต้นเพื่อไม่รวมการย้าย major compiler ในบทตั้งโครง
 
 ยืนยันแต่ยังไม่ติดตั้ง/เชื่อมต่อ: Prisma + SQLite และ Auth0 ของผู้พัฒนาเอง จากนั้นทำ Collections ร่วมกันและให้ผู้พัฒนาฝึก Bookmarks ตามแผน ยังไม่ทำ deploy, sharing, ถังขยะ, full-text search หรือหน้า /all

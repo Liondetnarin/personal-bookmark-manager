@@ -35,3 +35,13 @@ Prisma ยังไม่ติดตั้งในขั้นนี้: regis
 ข้อจำกัดที่พบจริงคือเครื่องมือ browser ไม่มี session ให้ใช้งาน จึงส่งขั้นตรวจหน้าเว็บให้ผู้พัฒนาลองเอง ไม่มีการแต่งบั๊ก auth หรือเหตุการณ์ recovery ให้ครบจำนวนตัวอย่าง
 
 ไม่มีตัวเลข token/cost ที่ตรวจสอบได้ในบันทึกนี้ จึงไม่ประมาณเป็นยอดใช้จริง ส่วนหลักฐานบทสนทนาใน transcripts/ เป็น excerpt ที่ระบุขอบเขตชัดเจน ไม่ใช่ประวัติครบทุกข้อความ
+
+## ขั้นที่ 2A — เตรียม Auth0 (2026-09-14)
+
+ผู้พัฒนาขอไปต่อและแจ้งว่ายังไม่มี Auth0 tenant จึงเตรียม docs/auth0-setup.md และคำสั่ง auth:inspect เพื่ออ่าน public discovery/JWKS ของ canonical Auth0 domain ที่ระบุเอง โดยยังไม่เลือกค่าตรวจ token ของ tenant ที่ไม่มีข้อมูล
+
+อ่านเอกสาร Auth0 ทางการเรื่อง React SPA, tenants, API registration และ signing algorithms คู่มือระบุ callback/logout/origin ตามพอร์ตโปรเจกต์ และแยก ID-token metadata ออกจากหลักฐาน algorithm ของ Access Token
+
+ตรวจ node --check ของ script และ --help ผ่าน ตรวจ placeholder, HTTP, non-Auth0 domain และ URL ที่มี credentials ว่าถูกปฏิเสธก่อน network request ผ่าน npm.cmd run check และ npm.cmd run smoke ของโครงเดิมผ่าน
+
+ยังไม่ได้รันเส้นทางอ่าน metadata กับ tenant จริง ยังไม่มี auth guard, /me หรือการตรวจ login จริง งาน dependent รอ Domain ของ tenant ที่ผู้พัฒนาสร้างเอง ไม่ถือว่าขั้น Authentication เสร็จ
