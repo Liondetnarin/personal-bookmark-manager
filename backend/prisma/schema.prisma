@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  issuer    String
+  subject   String
+  createdAt DateTime @default(now())
+  collections Collection[]
+
+  @@unique([issuer, subject])
+}
+
+model Collection {
+  id        String   @id @default(uuid())
+  name      String
+  nameKey   String
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ownerId, nameKey])
+  @@index([ownerId, createdAt, id])
+}

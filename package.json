@@ -16,7 +16,17 @@
     "build": "npm run build --workspaces",
     "check": "npm run typecheck && npm run build",
     "smoke": "node scripts/smoke.mjs",
-    "auth:inspect": "node scripts/inspect-auth0.mjs"
+    "auth:inspect": "node scripts/inspect-auth0.mjs",
+    "test": "npm run test --workspace backend",
+    "db:migrate": "npm run db:migrate --workspace backend"
+  },
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.0"
+    },
+    "prisma": {
+      "mysql2": "3.24.4"
+    }
   },
   "devDependencies": {
     "concurrently": "10.0.5",

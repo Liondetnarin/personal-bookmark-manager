@@ -78,6 +78,10 @@ npm.cmd run auth:inspect -- YOUR_TENANT.us.auth0.com
 
 ## เอกสารอ้างอิง
 
+สถานะล่าสุด 2026-09-14: ตั้ง env และตรวจ discovery/JWKS แล้ว ผู้พัฒนาเปิด User-Delegated Access สำหรับ SPA แล้ว ผล authorization probe แบบไม่มี session คือ login_required ยังต้องลอง login จริง ดู [บทเรียน Authentication](authentication.md)
+
+หาก SPA ไม่ได้รับสิทธิ์เรียก API ให้ไป Applications → APIs → API ของเรา → Application Access → SPA → Edit → Grant Access เฉพาะ User-Delegated Access แล้ว Save โดยใช้ Per-app authorization ดู [เอกสาร Application Access](https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants)
+
 - [Create tenants](https://auth0.com/docs/get-started/auth0-overview/create-tenants)
 - [React quickstart](https://auth0.com/docs/quickstart/spa/react)
 - [Register APIs](https://auth0.com/docs/get-started/auth0-overview/set-up-apis)

@@ -1,6 +1,6 @@
 # API contract — ยืนยันแล้วใน Q15
 
-สถานะ: ผู้พัฒนายืนยัน contract ร่วมกับแผนเริ่มงานใน Q15 แล้ว ขณะนี้กำลังทำ scaffold ยังไม่มี business API ที่ implement ตาม contract นี้
+สถานะ: ผู้พัฒนายืนยัน contract ร่วมกับแผนเริ่มงานใน Q15 แล้ว ปัจจุบัน implement `GET /me` และ Collection CRUD พร้อม global auth guard แล้ว ส่วน Bookmarks, `GET /collections/:id/bookmarks` และการรักษา Bookmarks เมื่อลบ Collection ยังเป็น contract สำหรับบทความสัมพันธ์ถัดไป ไม่ถือว่าทำสเปกครบทั้งแอปแล้ว
 
 ## Resources
 
@@ -72,4 +72,4 @@ ID ที่ไม่มีจริงและ ID ของผู้อื่�
 
 ## หลักฐานและข้อผิดพลาดจริง
 
-ยังไม่มีโค้ดหรือผล tests จึงยังไม่มีเหตุการณ์ผิดพลาดจาก implementation ให้รายงาน จะบันทึกเฉพาะเหตุการณ์ที่เกิดขึ้นจริง พร้อมตำแหน่งโค้ดและวิธีตรวจพบเมื่อเริ่มพัฒนา
+ผลและข้อจำกัดของ implementation อยู่ใน AI_WORKFLOW.md ปัจจุบันมี auth และ Collections tests ผ่าน HTTP กับฐานข้อมูลแยก ส่วน browser login เป็นผลที่ผู้พัฒนารายงานว่าสำเร็จ ยังไม่มีหลักฐานการทดสอบ Bookmark relations

@@ -6,14 +6,15 @@ API_DESIGN.md (contract), and LEARNING_PLAN.md (current learning stage).
 The rewritten docs are the project spec. Do not use or publish the source PDF.
 
 ## Learning boundary
-Step 1 is scaffolding only. Teach Auth and Collections together next.
+Step 1 scaffolding is complete. The developer reported successful browser login on 2026-09-15.
+Step 3 Collections CRUD API and tests are implemented. Review the ownership lesson with the developer before the Bookmark exercise.
 The developer practices Bookmarks; do not implement that exercise on their
 behalf without an explicit request. Explain each small change and its evidence.
 The user has approved the plan; do not reopen settled choices.
 
 ## Stack and commands
 Node 24, npm workspaces, TypeScript, NestJS, React/Vite/React Router/MUI.
-Prisma/SQLite is approved but not installed until the data-model lesson.
+Prisma/SQLite has User and Collection models. Bookmark relations are a later lesson.
 On Windows use npm.cmd if PowerShell blocks npm.ps1.
 Run npm run check and npm run smoke for scaffold changes.
 Use .agent/verify-change.md as the reusable verification workflow.

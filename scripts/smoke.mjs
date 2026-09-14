@@ -50,16 +50,23 @@ async function ready(url, record, expectedStatus) {
 try {
   const apiPort = await freePort();
   const apiUrl = `http://127.0.0.1:${apiPort}`;
-  const api = start(['dist/main.js'], join(root, 'backend'), { PORT: String(apiPort) });
+  const api = start(['dist/main.js'], join(root, 'backend'), {
+    PORT: String(apiPort), AUTH0_ISSUER: 'https://smoke-only.auth0.com/',
+    AUTH0_AUDIENCE: 'https://smoke-api.test', DATABASE_URL: 'file::memory:',
+  });
   await ready(apiUrl, api, 404);
 
-  // Scaffolding deliberately exposes no business API before the auth lesson.
-  for (const route of ['/me', '/collections', '/bookmarks']) {
+  const me = await fetch(apiUrl + '/me');
+  assert.equal(me.status, 401, '/me requires authentication');
+  assert.equal((await me.json()).error.code, 'UNAUTHENTICATED');
+  const collections = await fetch(apiUrl + '/collections');
+  assert.equal(collections.status, 401);
+  for (const route of ['/bookmarks']) {
     const response = await fetch(apiUrl + route);
     assert.equal(response.status, 404, `${route} must not exist yet`);
-    assert.equal((await response.json()).statusCode, 404);
+    assert.equal((await response.json()).error.code, 'NOT_FOUND');
   }
-  console.log('PASS: Nest starts; business routes are not exposed.');
+  console.log('PASS: Nest starts; /me and /collections require credentials; bookmark routes do not exist yet.');
 
   const webPort = await freePort();
   const webUrl = `http://127.0.0.1:${webPort}`;

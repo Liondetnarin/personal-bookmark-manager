@@ -1,6 +1,7 @@
 node_modules/
 .npm-cache/
 **/dist/
+/backend/src/generated/
 *.tsbuildinfo
 .env
 .env.*
@@ -20,3 +21,6 @@ test-results/
 !/docs/adr/
 /docs/adr/*
 !/docs/adr/*.md
+!/docs/reviews/
+/docs/reviews/*
+!/docs/reviews/*.md
