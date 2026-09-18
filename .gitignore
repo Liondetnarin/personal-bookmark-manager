@@ -17,3 +17,12 @@ test-results/
 /.impeccable/
 # Keep private/source documentation out of the repository.
 /docs/
+# Keep local agent configuration, transcripts and machine settings out of the repository.
+/.agent/
+/.agents/
+/.codex/
+/transcripts/
+/skills-lock.json
+/.npmrc
+/AI_WORKFLOW.md
+/AGENTS.md
