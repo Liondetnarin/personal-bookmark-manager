@@ -1,6 +1,6 @@
 # แผนปรับ UI ขาว–เขียว
 
-สถานะ: ผู้ใช้ยืนยัน Q1–Q8 แล้ว แผนรวมด้านล่างรอยืนยันก่อนเริ่มแก้ UI
+สถานะ: ดำเนินการรอบแรกเสร็จแล้วเมื่อ 2026-09-18
 
 ## ข้อสรุปที่ผู้ใช้ยืนยัน
 
@@ -76,4 +76,13 @@
 - รองรับ zoom 200%, focus ที่มองเห็น และ reduced motion; ตรวจ contrast ของคู่สีที่ใช้งานจริง
 - ไม่เพิ่ม search สำหรับ Bookmarks, edit UI, sharing, trash, dashboard หรือ deployment ในรอบนี้
 
-เอกสารนี้เป็นแผน ไม่ใช่หลักฐานว่าแก้ UI หรือผ่านการตรวจรับแล้ว
+## ผลการดำเนินการรอบแรก
+
+- ปรับ shell, navigation และรายการให้กระชับในโทนขาว–เขียว
+- เปลี่ยน Bookmark title เป็นลิงก์เปิดแท็บใหม่ และแยกปุ่มรายละเอียด
+- ใช้ Drawer บน desktop และ full-screen Dialog บน mobile สำหรับรายละเอียด
+- ใช้ Dialog สำหรับฟอร์มสร้าง และถามยืนยันก่อนทิ้งข้อมูลที่กรอกค้าง
+- คงตัวกรองเดิมหลังบันทึก และคง API กับกฎข้อมูลเดิม
+- ปรับ browser fixtures ให้จับภาพหลังปิด dropdown และตรวจ desktop/mobile
+
+หลักฐาน: npm.cmd run check, npm.cmd test (52 ผ่าน), npm.cmd run smoke, npm.cmd run test:e2e (8 ผ่าน) และภาพใน test-results/bookmarks-desktop.png กับ test-results/bookmarks-mobile.png ที่ตรวจด้วยสายตาแล้ว
