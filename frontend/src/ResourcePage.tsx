@@ -28,6 +28,7 @@ export default function ResourcePage({ kind }: { kind: 'bookmarks' | 'collection
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState('');
   const [notice, setNotice] = useState('');
+  const [lastCreated, setLastCreated] = useState<Item | null>(null);
   const [selected, setSelected] = useState<Item | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState('');
@@ -88,12 +89,11 @@ export default function ResourcePage({ kind }: { kind: 'bookmarks' | 'collection
     const title = (isBookmark ? form.title : form.name).trim();
     if (!title || [...title].length > (isBookmark ? 200 : 100)) { setFormError('กรุณากรอกชื่อให้ถูกต้องตามความยาวที่กำหนด'); return; }
     setBusy(true);
-    const submittedPath = path;
     try {
-      await api(`/${kind}`, { method: 'POST', body: JSON.stringify(isBookmark ? { title: form.title, url: form.url, notes: form.notes || null, collectionId: form.collectionId || null } : { name: form.name }) });
+      const created = await api<Item>('/' + kind, { method: 'POST', body: JSON.stringify(isBookmark ? { title: form.title, url: form.url, notes: form.notes || null, collectionId: form.collectionId || null } : { name: form.name }) });
       if (!active.current) return;
-      setForm(emptyForm); setShowForm(false); setNotice(isBookmark ? 'บันทึกลิงก์แล้ว' : 'สร้างกลุ่มแล้ว');
-      if (currentPath.current !== submittedPath) setNotice('บันทึกแล้ว แต่รายการอยู่นอกตัวกรองปัจจุบัน');
+      const matchesFilter = !isBookmark || !group || (group === '__none' ? !form.collectionId : form.collectionId === group);
+      setForm(emptyForm); setShowForm(false); setLastCreated(created); setNotice(matchesFilter ? (isBookmark ? 'บันทึกลิงก์แล้ว' : 'สร้างกลุ่มแล้ว') : 'บันทึกแล้ว แต่รายการอยู่นอกตัวกรองปัจจุบัน');
       refresh();
     } catch (error) { if (active.current) setFormError(errorMessage(error)); }
     finally { if (active.current) setBusy(false); }
@@ -128,6 +128,7 @@ export default function ResourcePage({ kind }: { kind: 'bookmarks' | 'collection
     else { setShowForm(false); setFormError(''); }
   };
   const closeForm = () => { setDiscardPrompt(false); setShowForm(false); setForm(emptyForm); setFormError(''); };
+  const openForm = () => { setForm(isBookmark ? { ...emptyForm, collectionId: group && group !== '__none' ? group : '' } : emptyForm); setFormError(''); setShowForm(true); };
   const detailContent = selected && <>
     <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'flex-start', gap: 2 }}>
       <Box sx={{ minWidth: 0 }}><Typography id="detail-title" component="h2" variant="h5" sx={{ overflowWrap: 'anywhere' }}>{label(selected)}</Typography><Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>รายละเอียดรายการ</Typography></Box>
@@ -141,9 +142,9 @@ export default function ResourcePage({ kind }: { kind: 'bookmarks' | 'collection
   return <>
     <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ justifyContent: 'space-between', gap: 2, mb: 4 }}>
       <Box><Typography component="h1" variant="h3">{isBookmark ? 'ลิงก์ที่เก็บไว้' : 'กลุ่มของคุณ'}</Typography><Typography color="text.secondary" sx={{ mt: 1 }}>{isBookmark ? 'เก็บเรื่องที่สนใจ แล้วกลับมาอ่านในเวลาของคุณ' : 'จัดลิงก์ที่เกี่ยวข้องไว้ด้วยกัน เพื่อกลับมาหาได้ง่าย'}</Typography></Box>
-      <Button variant="contained" disabled={busy} sx={{ alignSelf: 'flex-start' }} onClick={() => { if (showForm) requestCloseForm(); else { setShowForm(true); setFormError(''); } }}>{showForm ? 'ปิดแบบฟอร์ม' : isBookmark ? 'บันทึกลิงก์' : 'สร้างกลุ่ม'}</Button>
+      <Button variant="contained" disabled={busy} sx={{ alignSelf: 'flex-start' }} onClick={() => { if (showForm) requestCloseForm(); else openForm(); }}>{showForm ? 'ปิดแบบฟอร์ม' : isBookmark ? 'บันทึกลิงก์' : 'สร้างกลุ่ม'}</Button>
     </Stack>
-    {notice && <Alert severity="success" onClose={() => setNotice('')} sx={{ mb: 2 }}>{notice}</Alert>}
+    {notice && <Alert severity="success" onClose={() => { setNotice(''); setLastCreated(null); }} action={lastCreated ? <Button color="inherit" size="small" onClick={() => { void detail(lastCreated); setNotice(''); setLastCreated(null); }}>ดูรายละเอียด</Button> : undefined} sx={{ mb: 2 }}>{notice}</Alert>}
     <Dialog open={showForm} fullScreen={compact} fullWidth maxWidth="sm" onClose={(_, reason) => { if (reason === 'backdropClick') return; requestCloseForm(); }} aria-labelledby="resource-form-title">
       <Box component="form" onSubmit={submit}>
       <DialogTitle id="resource-form-title">{isBookmark ? 'เพิ่มลิงก์ใหม่' : 'เพิ่มกลุ่มใหม่'}</DialogTitle>
@@ -177,11 +178,11 @@ export default function ResourcePage({ kind }: { kind: 'bookmarks' | 'collection
     {data && !data.items.length && <Box sx={{ py: 7, textAlign: 'center', borderTop: '1px solid', borderColor: 'divider' }}>
       <Typography component="h2" variant="h5">{name || group || page > 1 ? 'ไม่พบรายการในมุมมองนี้' : isBookmark ? 'เริ่มเก็บเรื่องที่คุณอยากอ่าน' : 'สร้างกลุ่มแรกของคุณ'}</Typography>
       <Typography color="text.secondary" sx={{ my: 2 }}>{name || group || page > 1 ? 'ลองเปลี่ยนตัวกรองหรือกลับไปดูรายการทั้งหมด' : 'รายการที่คุณสร้างจะปรากฏที่นี่ และมองเห็นได้เฉพาะคุณ'}</Typography>
-      <Button onClick={() => name || group || page > 1 ? setParams({}) : setShowForm(true)}>{name || group || page > 1 ? 'ดูทั้งหมด' : isBookmark ? 'เพิ่มลิงก์แรก' : 'เพิ่มกลุ่มแรก'}</Button>
+      <Button onClick={() => name || group || page > 1 ? setParams({}) : openForm()}>{name || group || page > 1 ? 'ดูทั้งหมด' : isBookmark ? 'เพิ่มลิงก์แรก' : 'เพิ่มกลุ่มแรก'}</Button>
     </Box>}
     <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
       {data?.items.map((item) => <Box component="li" key={item.id} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, py: 2.5, borderTop: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: 'action.hover' }, '&:focus-within': { bgcolor: 'action.hover' } }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>{'url' in item ? <Typography component="a" href={item.url} target="_blank" rel="noopener noreferrer" sx={{ color: 'text.primary', fontSize: '1.1rem', fontWeight: 700, overflowWrap: 'anywhere', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>{label(item)}</Typography> : <Button onClick={() => void detail(item)} sx={{ p: 0, textAlign: 'left', justifyContent: 'flex-start', fontSize: '1.1rem', overflowWrap: 'anywhere', fontWeight: 700 }}>{label(item)}</Button>}
+        <Box sx={{ flex: 1, minWidth: 0 }}>{'url' in item ? <Typography component="a" href={item.url} target="_blank" rel="noopener noreferrer" sx={{ color: 'text.primary', fontSize: '1.1rem', fontWeight: 700, overflowWrap: 'anywhere', textDecorationThickness: '1px', textUnderlineOffset: '3px' }}>{label(item)}</Typography> : <Button component={Link} to={'/bookmarks?collectionId=' + encodeURIComponent(item.id)} sx={{ p: 0, textAlign: 'left', justifyContent: 'flex-start', fontSize: '1.1rem', overflowWrap: 'anywhere', fontWeight: 700 }}>{label(item)}</Button>}
           {'url' in item && <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, overflowWrap: 'anywhere' }}>{(() => { try { return new URL(item.url).hostname; } catch { return item.url; } })()}</Typography>}
           {'notes' in item && item.notes && <Typography variant="body2" sx={{ mt: 1, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{item.notes.slice(0, 160)}{item.notes.length > 160 ? '…' : ''}</Typography>}
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mt: 1.5 }}><Typography variant="caption" color="text.secondary">{new Date(item.createdAt).toLocaleDateString('th-TH')}</Typography>{'collectionId' in item && <Chip size="small" variant="outlined" label={item.collectionId ? groups.find((g) => g.id === item.collectionId)?.name ?? 'อยู่ในกลุ่ม' : 'ไม่จัดกลุ่ม'} />}</Stack>
