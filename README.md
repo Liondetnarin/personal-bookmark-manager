@@ -1,5 +1,28 @@
 # Personal Bookmark Manager
 
+## Current implementation
+
+The first portfolio slice is complete: Auth0-protected `/me`, Collections CRUD, and owner-scoped Bookmarks CRUD are backed by Prisma/SQLite. The React/Vite workspace supports collection management, bookmark create/detail/delete, collection and uncategorised filters, responsive layouts, and recovery states.
+
+Run the app with:
+
+```powershell
+npm.cmd ci
+npm.cmd run db:migrate
+npm.cmd run dev
+```
+
+Verification commands:
+
+```powershell
+npm.cmd run check
+npm.cmd test
+npm.cmd run smoke
+npm.cmd run test:e2e
+```
+
+`npm.cmd test` runs 52 isolated backend tests. `npm.cmd run test:e2e` runs 8 Playwright tests across desktop and mobile against a temporary SQLite database and signed fixture identities. Real Auth0 values remain local in `.env` files.
+
 โปรเจกต์ฝึก Full-stack เพื่อเข้าใจการทำงานของแอป ตรวจงาน AI และต่อยอดเป็น portfolio พัฒนาเป็นขั้นเล็ก ๆ ตาม [แผนเรียนรู้](LEARNING_PLAN.md)
 
 ## สถานะปัจจุบัน: ขั้นที่ 3 — Collections API

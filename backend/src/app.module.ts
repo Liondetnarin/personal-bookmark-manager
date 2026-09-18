@@ -10,16 +10,19 @@ import { MeController } from './me.controller.js';
 import { OwnerService } from './auth/owner.service.js';
 import { CollectionsController } from './collections/collections.controller.js';
 import { CollectionsService } from './collections/collections.service.js';
+import { BookmarksController, CollectionBookmarksController } from './bookmarks/bookmarks.controller.js';
+import { BookmarksService } from './bookmarks/bookmarks.service.js';
 
 @Module({})
 export class AppModule {
   static register(config: AppConfig): DynamicModule {
     return {
       module: AppModule,
-      controllers: [MeController, CollectionsController],
+      controllers: [MeController, CollectionsController, BookmarksController, CollectionBookmarksController],
       providers: [
         OwnerService,
         CollectionsService,
+        BookmarksService,
         { provide: AccessTokenVerifier, useFactory: () => new AccessTokenVerifier(config) },
         { provide: DatabaseService, useFactory: () => new DatabaseService(config.databaseUrl) },
         { provide: APP_GUARD, useClass: AuthGuard },

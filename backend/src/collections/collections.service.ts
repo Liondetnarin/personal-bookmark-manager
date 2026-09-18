@@ -47,9 +47,12 @@ export class CollectionsService {
 
   async remove(ownerId: string, id: string): Promise<void> {
     try {
-      await this.database.collection.delete({ where: { id, ownerId } });
+      await this.database.$transaction(async (tx) => {
+        if (!await tx.collection.findFirst({ where: { id, ownerId }, select: { id: true } })) throw new NotFoundException();
+        await tx.bookmark.updateMany({ where: { collectionId: id, ownerId }, data: { collectionId: null } });
+        await tx.collection.delete({ where: { id, ownerId } });
+      });
     } catch (error) { this.rethrow(error); }
-    // Bookmark relation and preservation tests belong to the later Bookmark lesson.
   }
 
   private rethrow(error: unknown): never {

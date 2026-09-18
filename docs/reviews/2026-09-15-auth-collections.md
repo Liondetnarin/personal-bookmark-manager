@@ -35,3 +35,7 @@ References: [multer advisory](https://github.com/advisories/GHSA-wc9g-mqfw-jrwm)
 - `npm ls deepmerge-ts mysql2 multer @nestjs/platform-express`: resolved patched/overridden versions without invalid dependency errors.
 
 Limits: no claim of exhaustive security assurance; no production/deployment assessment. Real Auth0 login success is user-reported, while Collections security behavior was exercised with signed test tokens. Vite's existing 599.37 kB bundle warning remains.
+
+## Superseding status — 2026-09-18
+
+The deferred Bookmark model/routes and UI described above were implemented after explicit authorization. See `docs/bookmark-exercise.md` and the current verification commands in `README.md` for the completed scope and evidence.

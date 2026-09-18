@@ -79,3 +79,19 @@ npm audit พบ affected package entries ระดับ high 6 รายกา
 Commit eef2562 บันทึก Auth/Collections และผลตรวจแล้ว ก่อน commit สแกน staged files 43 ไฟล์ด้วยชื่อไฟล์ต้องห้าม, ค่าตั้ง Auth0 จริงที่ทราบจาก local env และรูปแบบ JWT/private key ไม่พบรายการตรงเงื่อนไข สแกนนี้มีขอบเขตตามกฎดังกล่าว ไม่ใช่การรับประกันว่าจะตรวจพบความลับทุกชนิด
 
 หลัง commit เริ่มขั้นที่ 4 ด้วย docs/bookmark-exercise.md ให้ผู้พัฒนาเขียน bookmarkTitle ด้วยตนเองจากตัวอย่าง Collections มีตารางผลคาดหวังและคำสั่ง typecheck แต่ยังไม่มีโค้ดหรือ tests ของ Bookmark และไม่กล่าวอ้างว่าผู้พัฒนาทำสำเร็จแล้ว
+
+## bookmarkTitle — 2026-09-17
+
+ผู้พัฒนาเขียนฟังก์ชันตรวจ string และคืนค่าเดิมไว้แล้ว พร้อม throw Error สำหรับชนิดอื่น จากนั้นขอให้ช่วยทำและอธิบาย จึงเติม trim, ตรวจความยาว 1–200 Unicode code points และใช้ BadRequestException แทน Error ทั่วไป โค้ดเดิมยังไม่ปฏิเสธชื่อว่าง/ยาวเกิน ไม่มีการกล่าวอ้างว่าเป็น test failure เพราะพบจากการอ่านโค้ด
+
+เพิ่ม behavioral tests 4 รายการใน backend/test/bookmark-input.test.mjs ครอบคลุม trimming/preservation, non-string, whitespace-only และขอบเขต 1/200/201 รวม emoji หลังแก้ npm.cmd run check ผ่าน และ npm.cmd test ผ่านรวม 36 รายการ Vite ยังมี bundle warning เดิม ไม่มี scaffold change จึงไม่รัน smoke ซ้ำ ยังไม่มี Bookmark model/routes หรือการบันทึกข้อมูล และยังไม่ได้ commit งานรอบนี้
+
+## bookmarkUrl — 2026-09-17
+
+ผู้พัฒนาขอดำเนินการต่อจากบท title จึงทำ helper bookmarkUrl ตาม API contract: trim, จำกัด 2,048 code points, parse ด้วย URL แบบไม่มี base, รับ HTTP(S) ที่มี hostname และไม่มี username/password คืนข้อความหลัง trim โดยไม่เรียกปลายทาง เพิ่ม tests 5 รายการ รวม literal URL preservation, malformed/relative/non-string, schemes/credentials, Unicode boundary และ generic parser error
+
+npm.cmd run check ผ่าน (ยังมี Vite bundle warning เดิม) npm.cmd test รอบแรกพบ SyntaxError ในไฟล์ test เพราะ AI ลืมปิด test callback เพิ่มวงเล็บปิดแล้วรัน `node --test test/*.test.mjs` จาก backend กับ build ที่เพิ่งผ่าน ได้ 41 tests ผ่านทั้งหมด ไม่รัน build ซ้ำเพราะแก้เฉพาะไฟล์ test .mjs ยังไม่มี Bookmark routes/schema หรือการตรวจ ownership ของ Bookmark และไม่ได้ commit รอบนี้
+
+## Bookmark portfolio slice — 2026-09-18
+
+Implemented the planned Bookmark slice after explicit developer authorization. Added Prisma Bookmark relations/migration, owner-scoped API contract and validation, composite ownership safeguards, collection-delete preservation, React/MUI workspace flows, and isolated Playwright coverage. Verification: `npm.cmd run check`, `npm.cmd test` (52 passing), `npm.cmd run smoke`, and `npm.cmd run test:e2e` (8 passing across desktop/mobile).

@@ -14,6 +14,7 @@ model User {
   subject   String
   createdAt DateTime @default(now())
   collections Collection[]
+  bookmarks Bookmark[]
 
   @@unique([issuer, subject])
 }
@@ -26,7 +27,25 @@ model Collection {
   owner     User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  bookmarks Bookmark[]
 
+  @@unique([id, ownerId])
   @@unique([ownerId, nameKey])
   @@index([ownerId, createdAt, id])
+}
+
+model Bookmark {
+  id           String @id @default(uuid())
+  url          String
+  title        String
+  notes        String?
+  ownerId      String
+  owner        User @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  collectionId String?
+  collection   Collection? @relation(fields: [collectionId, ownerId], references: [id, ownerId], onDelete: Restrict)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([ownerId, createdAt, id])
+  @@index([ownerId, collectionId, createdAt, id])
 }

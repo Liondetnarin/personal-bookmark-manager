@@ -73,3 +73,7 @@ ID ที่ไม่มีจริงและ ID ของผู้อื่�
 ## หลักฐานและข้อผิดพลาดจริง
 
 ผลและข้อจำกัดของ implementation อยู่ใน AI_WORKFLOW.md ปัจจุบันมี auth และ Collections tests ผ่าน HTTP กับฐานข้อมูลแยก ส่วน browser login เป็นผลที่ผู้พัฒนารายงานว่าสำเร็จ ยังไม่มีหลักฐานการทดสอบ Bookmark relations
+
+## Superseding status — 2026-09-18
+
+The planned Bookmark stage is complete. The current implementation includes the Bookmark schema, owner-scoped routes, nested collection reads, validation, UI, and browser verification described in `docs/bookmark-exercise.md`. Earlier notes in this file describe the starting point and are retained as learning history.

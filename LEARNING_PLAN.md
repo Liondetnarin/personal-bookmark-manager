@@ -4,6 +4,8 @@
 
 ## สิ่งที่ยืนยันแล้ว
 
+อัปเดต 2026-09-17: ทำ bookmarkTitle และต่อ bookmarkUrl ตามคำขอ พร้อม tests ตรวจชนิดข้อมูล รูปแบบ URL ข้อมูลล็อกอินที่ฝังใน URL และขอบเขต Unicode ผ่าน ขั้นถัดไปคือ POST body validation ก่อนความสัมพันธ์ฐานข้อมูล ยังไม่มี Bookmark API
+
 ยึดสเปกส่วนตัวใน docs และข้อสรุป Q1–Q14 ใน DECISIONS.md: สองหน้าหลัก, NestJS/TypeScript, Prisma/SQLite, React/Vite/React Router/MUI, Auth0 ของตนเอง และการแยกข้อมูลส่วนตัว ใช้ 1–2 วันเป็นเป้าหมายรอบแรก ยืดเพื่อเรียนรู้ได้โดยไม่เพิ่มฟีเจอร์
 
 ## ข้อเสนอด้านการจัดโปรเจกต์
@@ -38,3 +40,7 @@
 ## สถานะเริ่มงาน
 
 ผู้พัฒนายืนยันใน Q15 แล้ว ไม่ต้องเปิดคำถามที่ตกลงแล้วซ้ำ ปัจจุบัน Auth/Collections implement แล้ว ขั้นถัดไปคือแบบฝึก Bookmarks ของผู้พัฒนา
+
+## Current status (2026-09-18)
+
+Stages 1-6 are complete for this learning slice: Auth0 integration, owner-scoped Collections, Bookmark validation/API/schema, responsive React UI, and browser verification. The project is ready for review, portfolio write-up, and optional polish within the existing feature boundary.

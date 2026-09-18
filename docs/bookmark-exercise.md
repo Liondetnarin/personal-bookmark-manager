@@ -1,5 +1,7 @@
 # แบบฝึก Bookmarks — เริ่มทีละส่วน
 
+สถานะ 2026-09-17: bookmarkTitle และ bookmarkUrl พร้อม tests แล้ว หลังผู้พัฒนาขอให้ช่วยทำและดำเนินการต่อ ส่วน POST body, schema และ routes ยังเป็นงานถัดไป
+
 ฐานตัวอย่างคือ commit `eef2562` ซึ่งมี Auth/Collections และผ่านการตรวจแล้ว ขั้นนี้ให้ผู้พัฒนาลงมือเอง โดย AI ช่วยอธิบาย ตรวจ และแก้เฉพาะจุด ยังไม่เปิด Bookmark API จนกว่าจะมี auth/ownership พร้อมกัน
 
 ## งานแรก: ตรวจชื่อ Bookmark
@@ -42,9 +44,29 @@ npm.cmd run typecheck --workspace backend
 
 ## ลำดับถัดจากงานแรก
 
+บท URL ที่ทำแล้วอยู่ใน `backend/src/bookmarks/bookmark-input.ts` ชื่อ `bookmarkUrl(value: unknown)`:
+
+1. ตรวจ string และ trim เช่นเดียวกับ title จำกัดไม่เกิน 2,048 Unicode code points
+2. ใช้ `new URL(url)` โดยไม่ส่ง base URL เพื่อปฏิเสธ relative URL เช่น `/read`
+3. ตรวจ `protocol` ให้เป็น `http:` หรือ `https:` และต้องมี `hostname`
+4. ปฏิเสธ `username` หรือ `password` ที่ฝังอยู่ในลิงก์
+5. คืน string หลัง trim แทน `parsed.href` เพื่อรักษารูปแบบลิงก์เดิม ไม่เรียกเว็บไซต์หรือทำ DNS lookup
+
+`new URL` ช่วยแยกส่วนของลิงก์ แต่ไม่ได้บังคับกฎของแอปให้ทั้งหมด เช่น `javascript:alert(1)` parse ได้ จึงยังต้องตรวจ protocol เอง ส่วน parser error ถูกแปลงเป็น BadRequestException เพื่อไม่เปิดเผย input ในข้อความผิดพลาด
+
+ตัวอย่าง: `https://example.invalid/read?q=one#part` ผ่าน, `/read` และ `https://user:password@example.invalid` ไม่ผ่าน การตรวจรูปแบบไม่ยืนยันว่าเว็บไซต์เปิดได้หรือเนื้อหาปลอดภัย ใช้ WHATWG URL parser ตาม Node; localhost/IP ยอมรับได้ตาม contract เพราะขั้นนี้เก็บลิงก์ ไม่ได้ดึงเนื้อหา
+
+ขั้นต่อไป:
+
 - ตรวจ URL และ body สำหรับ POST: title/url บังคับ, notes/collectionId เป็น optional, field ที่ไม่รู้จักต้องถูกปฏิเสธ
 - ออกแบบ Bookmark schema และความสัมพันธ์กับ User/Collection พร้อม migration และ tests การรักษา Bookmarks เมื่อลบ Collection
 - ทำ POST/GET พร้อม owner scope และตรวจ Collection ปลายทางว่าเป็นของผู้เรียก แม้รู้ Collection ID ก็ไม่พอ
 - ทำ pagination/filter, PUT/PATCH และ DELETE ทีละส่วน แล้วตรวจสอง identities ก่อนเชื่อม UI
 
-ยังไม่มี Bookmark implementation หรือผลทดสอบฟีเจอร์ Bookmarks ณ ตอนเริ่มแบบฝึกนี้
+มีเฉพาะ helper ตรวจ title/URL กับ unit tests ยังไม่มี Bookmark API หรือฐานข้อมูล Bookmark และผล tests ไม่ใช่หลักฐานว่าฟีเจอร์บันทึกลิงก์ครบแล้ว
+
+## Implementation result
+
+The exercise is complete as the first portfolio slice. It includes owner-scoped bookmark CRUD, validation, collection and uncategorised filters, pagination, nested collection views, composite ownership protection, and preservation of bookmarks when a collection is deleted. The React workspace includes responsive screens, detail, confirmation, loading, empty, and retry states.
+
+Verification uses 52 isolated backend tests and 8 Playwright tests across desktop and mobile with signed fixture identities and temporary SQLite data. No real Auth0 secrets or application data are used by the test suite.

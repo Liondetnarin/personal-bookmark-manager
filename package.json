@@ -18,7 +18,10 @@
     "smoke": "node scripts/smoke.mjs",
     "auth:inspect": "node scripts/inspect-auth0.mjs",
     "test": "npm run test --workspace backend",
-    "db:migrate": "npm run db:migrate --workspace backend"
+    "db:migrate": "npm run db:migrate --workspace backend",
+    "test:e2e": "npm run build --workspace backend && node scripts/browser-tests.mjs test",
+    "browser:install": "node scripts/browser-tests.mjs install chromium",
+    "test:privacy": "npm run build --workspace backend && node --test backend/test/bookmarks.test.mjs"
   },
   "overrides": {
     "@prisma/config": {
@@ -29,6 +32,7 @@
     }
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "concurrently": "10.0.5",
     "typescript": "5.9.3"
   }

@@ -64,3 +64,7 @@ Automated tests รวม 31 รายการผ่าน รวม auth tests
 ยังไม่ได้ทดสอบ Collections ผ่าน browser หรือ token จาก Auth0 จริง และยังพิสูจน์การลบ Collection แล้วรักษา Bookmarks ไม่ได้ เพราะยังไม่มี Bookmark model ส่วน `GET /collections/:id/bookmarks` จะทำพร้อมบทความสัมพันธ์ ไม่คืนรายการว่างปลอมเพื่ออ้างว่าทำเสร็จแล้ว
 
 อ้างอิง: [NestJS controllers](https://docs.nestjs.com/controllers), [Prisma filtering and sorting](https://docs.prisma.io/docs/orm/v7/prisma-client/queries/filtering-and-sorting)
+
+## Superseding status — 2026-09-18
+
+The Bookmark relation stage is now implemented: deleting a collection clears `collectionId` and preserves the owner's bookmarks, with API and browser tests covering the behavior.

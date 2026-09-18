@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Alert, Button, Stack, Typography } from '@mui/material';
 import type { AuthConfig } from './auth-config';
@@ -6,11 +6,12 @@ import type { AuthConfig } from './auth-config';
 interface Me { id: string; subject: string }
 type State = { kind: 'loading' } | { kind: 'ready'; me: Me } | { kind: 'error'; message: string };
 
-export function AccountPanel({ config }: { config: AuthConfig }) {
+export function AccountPanel({ config, children }: { config: AuthConfig; children: ReactNode }) {
   const { isLoading, isAuthenticated, user, error, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
   const [state, setState] = useState<State>({ kind: 'loading' });
   const [attempt, setAttempt] = useState(0);
   const [actionError, setActionError] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   useEffect(() => {
     setState({ kind: 'loading' });
@@ -49,19 +50,29 @@ export function AccountPanel({ config }: { config: AuthConfig }) {
     try { await loginWithRedirect(); } catch { setActionError(true); }
   };
   const signOut = async () => {
-    setState({ kind: 'loading' });
+    setSigningOut(true);
     setActionError(false);
     try { await logout({ logoutParams: { returnTo: window.location.origin } }); }
-    catch { setActionError(true); }
+    catch { setActionError(true); setSigningOut(false); }
   };
 
   if (isLoading) return <Typography role="status">กำลังตรวจสอบการเข้าสู่ระบบ…</Typography>;
+  if (signingOut) return <Typography role="status">กำลังออกจากระบบ…</Typography>;
   if (error) return <Stack spacing={2}>
     <Alert severity="error">เข้าสู่ระบบไม่สำเร็จ กรุณาลองอีกครั้ง หากยังพบปัญหาให้ตรวจการตั้งค่า Auth0</Alert>
     <Button variant="contained" onClick={() => { window.location.assign('/'); }}>กลับไปลองใหม่</Button>
   </Stack>;
 
-  return <Stack spacing={3} sx={{ alignItems: 'flex-start' }}>
+  if (isAuthenticated && state.kind === 'ready' && state.me.subject === user?.sub) return <>
+    <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+      <div><Typography>สวัสดี {user?.name ?? 'คุณ'}</Typography><Typography variant="caption" color="text.secondary" role="status">เชื่อมต่อบัญชีของคุณแล้ว</Typography></div>
+      <Button variant="outlined" onClick={() => void signOut()}>ออกจากระบบ</Button>
+    </Stack>
+    {actionError && <Alert severity="error">ออกจากระบบไม่สำเร็จ กรุณาลองใหม่</Alert>}
+    <div key={user.sub}>{children}</div>
+  </>;
+
+  return <Stack spacing={3}>
     {actionError && <Alert severity="error">ดำเนินการไม่สำเร็จ กรุณาลองอีกครั้ง</Alert>}
     {!isAuthenticated ? <>
       <Typography color="text.secondary">เข้าสู่ระบบเพื่อเริ่มใช้งานพื้นที่ส่วนตัวของคุณ</Typography>
@@ -75,7 +86,6 @@ export function AccountPanel({ config }: { config: AuthConfig }) {
       </>}
       {state.kind === 'ready' && <>
         <Typography role="status">เชื่อมต่อบัญชีของคุณแล้ว</Typography>
-        <Typography color="text.secondary">ฟีเจอร์จัดกลุ่มและบันทึกลิงก์กำลังพัฒนา</Typography>
       </>}
       <Button variant="outlined" onClick={() => void signOut()}>ออกจากระบบ</Button>
     </>}

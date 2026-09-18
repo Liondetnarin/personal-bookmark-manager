@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { pagination } from '../pagination.js';
 
 export function noQuery(query: Record<string, unknown>): void {
   if (Object.keys(query).length) throw new BadRequestException();
@@ -19,17 +20,7 @@ export function collectionQuery(query: Record<string, unknown>) {
   if (Object.keys(query).some((key) => !['page', 'pageSize', 'name'].includes(key))) {
     throw new BadRequestException();
   }
-  const integer = (value: unknown, fallback: number) => {
-    if (value === undefined) return fallback;
-    if (typeof value !== 'string' || !/^[0-9]+$/.test(value)) throw new BadRequestException();
-    const number = Number(value);
-    if (!Number.isSafeInteger(number) || number < 1) throw new BadRequestException();
-    return number;
-  };
-  const page = integer(query.page, 1);
-  const pageSize = integer(query.pageSize, 20);
-  const skip = (page - 1) * pageSize;
-  if (pageSize > 100 || !Number.isSafeInteger(skip)) throw new BadRequestException();
+  const { page, pageSize, skip } = pagination(query);
   if (query.name !== undefined && typeof query.name !== 'string') throw new BadRequestException();
   const name = (query.name as string | undefined)?.trim().toLowerCase() ?? '';
   return { page, pageSize, skip, name };

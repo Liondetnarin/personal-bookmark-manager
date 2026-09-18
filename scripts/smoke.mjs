@@ -63,10 +63,10 @@ try {
   assert.equal(collections.status, 401);
   for (const route of ['/bookmarks']) {
     const response = await fetch(apiUrl + route);
-    assert.equal(response.status, 404, `${route} must not exist yet`);
-    assert.equal((await response.json()).error.code, 'NOT_FOUND');
+    assert.equal(response.status, 401, `${route} requires authentication`);
+    assert.equal((await response.json()).error.code, 'UNAUTHENTICATED');
   }
-  console.log('PASS: Nest starts; /me and /collections require credentials; bookmark routes do not exist yet.');
+  console.log('PASS: Nest starts; /me, /collections and /bookmarks require credentials.');
 
   const webPort = await freePort();
   const webUrl = `http://127.0.0.1:${webPort}`;
