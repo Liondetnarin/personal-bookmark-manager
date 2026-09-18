@@ -50,13 +50,15 @@ test('create, detail, filters, cancel and confirm deletion through real API', as
   await page.getByLabel('บันทึกเพิ่มเติม').fill('<script>alert(1)</script> is plain text');
   await page.getByLabel('เก็บในกลุ่ม').click(); await page.getByRole('option', { name: 'Learning', exact: true }).click();
   await page.getByRole('button', { name: 'บันทึก', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'A useful article', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'A useful article', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'A useful article', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'รายละเอียด', exact: true }).first().click();
   await expect(page.getByRole('link', { name: 'เปิดลิงก์ในแท็บใหม่' })).toHaveAttribute('rel', 'noopener noreferrer');
-  await expect(page.getByRole('region', { name: 'รายละเอียด' })).toContainText('<script>alert(1)</script>');
+  await expect(page.getByRole('dialog').getByText('<script>alert(1)</script> is plain text', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'ปิดรายละเอียด' }).click();
   await page.getByLabel('กรองตามกลุ่ม').click(); await page.getByRole('option', { name: 'Learning', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Understanding TypeScript', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Understanding TypeScript', exact: true })).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await page.getByRole('heading', { name: 'ลิงก์ที่เก็บไว้', exact: true }).click();
   await page.screenshot({ path: `test-results/bookmarks-${info.project.name}.png`, fullPage: true });
   const before = await f.db.bookmark.count();
   await page.getByRole('button', { name: 'ลบ A useful article', exact: true }).click();
@@ -64,7 +66,7 @@ test('create, detail, filters, cancel and confirm deletion through real API', as
   await expect(page.getByRole('dialog')).toHaveCount(0); expect(await f.db.bookmark.count()).toBe(before);
   await page.getByRole('button', { name: 'ลบ A useful article', exact: true }).click();
   await page.getByRole('button', { name: 'ยืนยันลบ' }).click();
-  await expect(page.getByRole('button', { name: 'A useful article', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'A useful article', exact: true })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'ไม่พบรายการในมุมมองนี้' })).toBeVisible();
   expect(await f.db.bookmark.count()).toBe(before - 1);
   expect(errors).toEqual([]);
@@ -75,7 +77,7 @@ test('deleting a collection keeps its bookmarks and persistence survives reload'
   await page.goto(origin + '/collections');
   await page.getByRole('button', { name: 'Reading', exact: true }).click();
   await page.getByRole('link', { name: 'ดูลิงก์ในกลุ่มนี้' }).click();
-  await expect(page.getByRole('button', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
   await page.getByRole('link', { name: 'กลุ่มของคุณ', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Reading', exact: true })).toBeVisible();
   await page.screenshot({ path: `test-results/collections-${info.project.name}.png`, fullPage: true });
@@ -85,16 +87,16 @@ test('deleting a collection keeps its bookmarks and persistence survives reload'
   await expect(page.getByRole('button', { name: 'Reading', exact: true })).toHaveCount(0);
   await page.getByRole('link', { name: 'ลิงก์ที่เก็บไว้', exact: true }).click();
   await page.getByLabel('กรองตามกลุ่ม').click(); await page.getByRole('option', { name: 'ไม่จัดกลุ่ม', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
-  await page.reload(); await expect(page.getByRole('button', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
+  await page.reload(); await expect(page.getByRole('link', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
   const kept = await f.db.bookmark.findFirst({where:{ownerId:f.users[0].id}}); expect(kept.collectionId).toBeNull();
 });
 
 test('second identity cannot see first identity; logout clears workspace', async ({ page }) => {
   await page.addInitScript(() => { window.__TEST_USER_INDEX__ = 1; });
   await page.goto(origin + '/bookmarks');
-  await expect(page.getByRole('button', { name: 'Private B note', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Understanding TypeScript', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Private B note', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Understanding TypeScript', exact: true })).toHaveCount(0);
   await page.goto(origin + `/bookmarks?collectionId=${group.id}`);
   await expect(page.getByRole('alert')).toContainText('ไม่พบข้อมูลนี้');
   await page.getByRole('button', { name: 'ออกจากระบบ', exact: true }).click();
@@ -110,10 +112,12 @@ test('error recovery retains form values and handles duplicate group names', asy
   await expect(page.getByRole('alert')).toContainText('คุณมีกลุ่มชื่อนี้แล้ว');
   await expect(page.getByRole('textbox', { name: 'ชื่อกลุ่ม', exact: true })).toHaveValue('reading');
   await page.getByRole('button', { name: 'ยกเลิก', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'ทิ้งข้อมูลที่กรอกไว้?' })).toBeVisible();
+  await page.getByRole('button', { name: 'ทิ้งข้อมูล', exact: true }).click();
   await page.route('**/bookmarks?*', (route) => route.fulfill({ status: 500, contentType: 'application/json', body: '{}' }));
   await page.getByRole('link', { name: 'ลิงก์ที่เก็บไว้', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('ดำเนินการไม่สำเร็จ');
   await page.unroute('**/bookmarks?*');
   await page.getByRole('button', { name: 'ลองใหม่', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Understanding TypeScript', exact: true })).toBeVisible();
 });

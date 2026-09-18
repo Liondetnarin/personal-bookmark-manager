@@ -15,8 +15,10 @@ export function App() {
   ) : <Typography color="text.secondary">ยังไม่ได้ตั้งค่าการเข้าสู่ระบบ กรุณาตั้งค่า frontend/.env แล้วเริ่ม dev server ใหม่</Typography>;
 
   return (
-    <Container component="main" maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
-      <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', pb: 2, mb: 3 }}><Typography variant="h6" sx={{ fontWeight: 700 }}>Personal Bookmark Manager</Typography></Box>
+    <Container component="main" maxWidth="lg" sx={{ py: { xs: 2, md: 3 } }}>
+      <Box component="header" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid', borderColor: 'divider', pb: 2, mb: { xs: 2, md: 3 } }}>
+        <Box><Typography variant="h6" sx={{ fontWeight: 750, letterSpacing: '-0.02em' }}>Personal Bookmark Manager</Typography><Typography variant="body2" color="text.secondary">พื้นที่ส่วนตัวสำหรับลิงก์ที่อยากกลับมาอ่าน</Typography></Box>
+      </Box>
       {account}
     </Container>
   );
