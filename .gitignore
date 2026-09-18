@@ -15,12 +15,5 @@ playwright-report/
 test-results/
 /tmp/
 /.impeccable/
-# Publish only rewritten project documentation, never source PDFs.
-/docs/*
-!/docs/*.md
-!/docs/adr/
-/docs/adr/*
-!/docs/adr/*.md
-!/docs/reviews/
-/docs/reviews/*
-!/docs/reviews/*.md
+# Keep private/source documentation out of the repository.
+/docs/
