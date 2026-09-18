@@ -1,4 +1,4 @@
-# บทเรียน Collections — ตรวจตัวตนแล้ว ยังต้องตรวจเจ้าของ
+# บทเรียน Collections - ตรวจตัวตนแล้ว ยังต้องตรวจเจ้าของ
 
 บทนี้มี schema กับ API สำหรับสร้าง อ่านรายการ อ่านหนึ่งกลุ่ม เปลี่ยนชื่อ และลบ Collection หน้าจอยังคงเป็นหน้าล็อกอินเดิม เพราะแผนให้เรียน API และ tests ก่อนเชื่อม UI ส่วน Bookmark schema, routes และความสัมพันธ์ยังเป็นบทถัดไป
 
@@ -65,6 +65,6 @@ Automated tests รวม 31 รายการผ่าน รวม auth tests
 
 อ้างอิง: [NestJS controllers](https://docs.nestjs.com/controllers), [Prisma filtering and sorting](https://docs.prisma.io/docs/orm/v7/prisma-client/queries/filtering-and-sorting)
 
-## Superseding status — 2026-09-18
+## Superseding status - 2026-09-18
 
 The Bookmark relation stage is now implemented: deleting a collection clears `collectionId` and preserves the owner's bookmarks, with API and browser tests covering the behavior.

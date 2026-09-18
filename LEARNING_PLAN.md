@@ -1,10 +1,10 @@
-# แผนลงมือเรียนรู้ — ยืนยันแล้วใน Q15
+# แผนลงมือเรียนรู้ - ยืนยันแล้วใน Q15
 
-สถานะล่าสุด 2026-09-15: ผู้พัฒนายืนยันว่า login สำเร็จ (รายงานจากผู้พัฒนา) และร่วมทบทวน owner scope, unique constraint และ scoped total แล้ว ตรวจข้อมูล/ความปลอดภัยและ commit Auth/Collections เป็น eef2562 เริ่มขั้นที่ 4 ที่ docs/bookmark-exercise.md โดยให้ผู้พัฒนาเขียน bookmarkTitle ก่อน ยังไม่มี Bookmark implementation หรือ UI การทบทวนบทสนทนาไม่ใช่หลักฐานว่าผู้พัฒนาทำแบบฝึกได้แล้ว
+สถานะล่าสุด 2026-09-18: ผู้พัฒนายืนยันว่า login สำเร็จ (รายงานจากผู้พัฒนา) และร่วมทบทวน owner scope, unique constraint และ scoped total แล้ว Bookmark portfolio slice, UI responsive และ browser verification เสร็จตามขอบเขตที่ยืนยันไว้ การทบทวนบทสนทนาไม่ใช่หลักฐานแทนผลทดสอบจริง
 
 ## สิ่งที่ยืนยันแล้ว
 
-อัปเดต 2026-09-17: ทำ bookmarkTitle และต่อ bookmarkUrl ตามคำขอ พร้อม tests ตรวจชนิดข้อมูล รูปแบบ URL ข้อมูลล็อกอินที่ฝังใน URL และขอบเขต Unicode ผ่าน ขั้นถัดไปคือ POST body validation ก่อนความสัมพันธ์ฐานข้อมูล ยังไม่มี Bookmark API
+อัปเดต 2026-09-18: bookmarkTitle, bookmarkUrl, POST body validation, schema, owner-scoped API, UI และ tests เสร็จแล้ว โดยคงขอบเขตฟีเจอร์เดิม ไม่มี search, sharing, trash, dashboard หรือ deployment
 
 ยึดสเปกส่วนตัวใน docs และข้อสรุป Q1–Q14 ใน DECISIONS.md: สองหน้าหลัก, NestJS/TypeScript, Prisma/SQLite, React/Vite/React Router/MUI, Auth0 ของตนเอง และการแยกข้อมูลส่วนตัว ใช้ 1–2 วันเป็นเป้าหมายรอบแรก ยืดเพื่อเรียนรู้ได้โดยไม่เพิ่มฟีเจอร์
 
@@ -39,7 +39,7 @@
 
 ## สถานะเริ่มงาน
 
-ผู้พัฒนายืนยันใน Q15 แล้ว ไม่ต้องเปิดคำถามที่ตกลงแล้วซ้ำ ปัจจุบัน Auth/Collections implement แล้ว ขั้นถัดไปคือแบบฝึก Bookmarks ของผู้พัฒนา
+ผู้พัฒนายืนยันใน Q15 แล้ว ไม่ต้องเปิดคำถามที่ตกลงแล้วซ้ำ ปัจจุบัน learning slice ที่รวม Auth, Collections, Bookmarks และ UI implement แล้ว ขั้นถัดไปเป็นการทบทวน/ต่อยอดภายในขอบเขตเดิมตามความสนใจ
 
 ## Current status (2026-09-18)
 

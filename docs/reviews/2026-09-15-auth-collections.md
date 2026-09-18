@@ -1,4 +1,4 @@
-# Auth/Collections review — 2026-09-15
+# Auth/Collections review - 2026-09-15
 
 Scope: uncommitted work against HEAD `fb7a884`, including new files. Adapted the two-axis review to the working tree; project Markdown is the spec rather than an external issue. Two independent read-only reviewers inspected Standards and Spec. Findings below summarize their reports; they are not transcripts. The main agent additionally checked dependencies and database integrity.
 
@@ -36,6 +36,6 @@ References: [multer advisory](https://github.com/advisories/GHSA-wc9g-mqfw-jrwm)
 
 Limits: no claim of exhaustive security assurance; no production/deployment assessment. Real Auth0 login success is user-reported, while Collections security behavior was exercised with signed test tokens. Vite's existing 599.37 kB bundle warning remains.
 
-## Superseding status — 2026-09-18
+## Superseding status - 2026-09-18
 
 The deferred Bookmark model/routes and UI described above were implemented after explicit authorization. See `docs/bookmark-exercise.md` and the current verification commands in `README.md` for the completed scope and evidence.

@@ -1,4 +1,4 @@
-# AI workflow — หลักฐานที่เกิดขึ้นจริง
+# AI workflow - หลักฐานที่เกิดขึ้นจริง
 
 ## วิธีทำงาน
 
@@ -36,7 +36,7 @@ Prisma ยังไม่ติดตั้งในขั้นนี้: regis
 
 ไม่มีตัวเลข token/cost ที่ตรวจสอบได้ในบันทึกนี้ จึงไม่ประมาณเป็นยอดใช้จริง ส่วนหลักฐานบทสนทนาใน transcripts/ เป็น excerpt ที่ระบุขอบเขตชัดเจน ไม่ใช่ประวัติครบทุกข้อความ
 
-## ขั้นที่ 2A — เตรียม Auth0 (2026-09-14)
+## ขั้นที่ 2A - เตรียม Auth0 (2026-09-14)
 
 ผู้พัฒนาขอไปต่อและแจ้งว่ายังไม่มี Auth0 tenant จึงเตรียม docs/auth0-setup.md และคำสั่ง auth:inspect เพื่ออ่าน public discovery/JWKS ของ canonical Auth0 domain ที่ระบุเอง โดยยังไม่เลือกค่าตรวจ token ของ tenant ที่ไม่มีข้อมูล
 
@@ -46,7 +46,7 @@ Prisma ยังไม่ติดตั้งในขั้นนี้: regis
 
 ยังไม่ได้รันเส้นทางอ่าน metadata กับ tenant จริง ยังไม่มี auth guard, /me หรือการตรวจ login จริง งาน dependent รอ Domain ของ tenant ที่ผู้พัฒนาสร้างเอง ไม่ถือว่าขั้น Authentication เสร็จ
 
-## Step 2B — 2026-09-14 (work summary, not transcript)
+## Step 2B - 2026-09-14 (work summary, not transcript)
 
 Implemented Auth0 React login/logout, a global Nest guard validating RS256 signatures/issuer/audience/claims with jose, and GET /me backed by Prisma/SQLite User identity. No Collections or Bookmarks implementation.
 
@@ -56,7 +56,7 @@ Actual corrections: MUI Stack alignItems moved into sx after typecheck rejected 
 
 Tenant discovery/JWKS succeeded. ID-token algorithm metadata does not prove API Access Token settings. The authorization probe initially failed because SPA API access was missing. After the user enabled User-Delegated Access, a sessionless probe returned login_required. This does not prove successful login. Browser tools had no available session; actual browser login/callback/API verification is still pending.
 
-## ขั้นที่ 3 — Collections API (2026-09-15)
+## ขั้นที่ 3 - Collections API (2026-09-15)
 
 บันทึกนี้เป็นสรุป ไม่ใช่ transcript ผู้พัฒนายืนยันว่าลอง login สำเร็จและขอไปขั้นถัดไป จึงอัปเดตสถานะ Auth เป็นผลที่ผู้พัฒนารายงาน ไม่อ้างว่า agent ตรวจ browser เอง
 
@@ -70,7 +70,7 @@ Tests รอบแรกของบท Collections ผ่านทั้งห�
 
 เพิ่ม docs/collections.md ให้ผู้พัฒนาอ่านตามเส้นทางคำขอและอธิบาย owner predicate, unique constraint และ scoped total ก่อนแบบฝึก Bookmarks ไม่มีการเพิ่ม frontend UI, Bookmark model/routes, nested bookmarks route หรือ deploy การรักษา Bookmarks เมื่อลบ Collection และการตรวจ Collections ด้วย Auth0 token จริงยังไม่ได้ทำ
 
-## ตรวจข้อมูล ความปลอดภัย และเตรียม commit — 2026-09-15
+## ตรวจข้อมูล ความปลอดภัย และเตรียม commit - 2026-09-15
 
 ผู้พัฒนาขอให้ตรวจข้อมูล/ความปลอดภัยก่อน commit แล้วไปขั้นถัดไป ใช้ code-review skill แยก Standards กับ Spec ในสอง reviewer โดยเทียบ working tree กับ fb7a884 พบข้อเสนอปรับ startup log และข้อความสถานะเก่าในแผนเรียนรู้ แก้ทั้งสองแล้ว Main agent ตรวจ SQLite แบบ read-only ได้ integrity ok และไม่พบ orphan/foreign-key violation/ชื่อซ้ำ/migration ค้าง
 
@@ -80,18 +80,18 @@ Commit eef2562 บันทึก Auth/Collections และผลตรวจ�
 
 หลัง commit เริ่มขั้นที่ 4 ด้วย docs/bookmark-exercise.md ให้ผู้พัฒนาเขียน bookmarkTitle ด้วยตนเองจากตัวอย่าง Collections มีตารางผลคาดหวังและคำสั่ง typecheck แต่ยังไม่มีโค้ดหรือ tests ของ Bookmark และไม่กล่าวอ้างว่าผู้พัฒนาทำสำเร็จแล้ว
 
-## bookmarkTitle — 2026-09-17
+## bookmarkTitle - 2026-09-17
 
 ผู้พัฒนาเขียนฟังก์ชันตรวจ string และคืนค่าเดิมไว้แล้ว พร้อม throw Error สำหรับชนิดอื่น จากนั้นขอให้ช่วยทำและอธิบาย จึงเติม trim, ตรวจความยาว 1–200 Unicode code points และใช้ BadRequestException แทน Error ทั่วไป โค้ดเดิมยังไม่ปฏิเสธชื่อว่าง/ยาวเกิน ไม่มีการกล่าวอ้างว่าเป็น test failure เพราะพบจากการอ่านโค้ด
 
 เพิ่ม behavioral tests 4 รายการใน backend/test/bookmark-input.test.mjs ครอบคลุม trimming/preservation, non-string, whitespace-only และขอบเขต 1/200/201 รวม emoji หลังแก้ npm.cmd run check ผ่าน และ npm.cmd test ผ่านรวม 36 รายการ Vite ยังมี bundle warning เดิม ไม่มี scaffold change จึงไม่รัน smoke ซ้ำ ยังไม่มี Bookmark model/routes หรือการบันทึกข้อมูล และยังไม่ได้ commit งานรอบนี้
 
-## bookmarkUrl — 2026-09-17
+## bookmarkUrl - 2026-09-17
 
 ผู้พัฒนาขอดำเนินการต่อจากบท title จึงทำ helper bookmarkUrl ตาม API contract: trim, จำกัด 2,048 code points, parse ด้วย URL แบบไม่มี base, รับ HTTP(S) ที่มี hostname และไม่มี username/password คืนข้อความหลัง trim โดยไม่เรียกปลายทาง เพิ่ม tests 5 รายการ รวม literal URL preservation, malformed/relative/non-string, schemes/credentials, Unicode boundary และ generic parser error
 
 npm.cmd run check ผ่าน (ยังมี Vite bundle warning เดิม) npm.cmd test รอบแรกพบ SyntaxError ในไฟล์ test เพราะ AI ลืมปิด test callback เพิ่มวงเล็บปิดแล้วรัน `node --test test/*.test.mjs` จาก backend กับ build ที่เพิ่งผ่าน ได้ 41 tests ผ่านทั้งหมด ไม่รัน build ซ้ำเพราะแก้เฉพาะไฟล์ test .mjs ยังไม่มี Bookmark routes/schema หรือการตรวจ ownership ของ Bookmark และไม่ได้ commit รอบนี้
 
-## Bookmark portfolio slice — 2026-09-18
+## Bookmark portfolio slice - 2026-09-18
 
 Implemented the planned Bookmark slice after explicit developer authorization. Added Prisma Bookmark relations/migration, owner-scoped API contract and validation, composite ownership safeguards, collection-delete preservation, React/MUI workspace flows, and isolated Playwright coverage. Verification: `npm.cmd run check`, `npm.cmd test` (52 passing), `npm.cmd run smoke`, and `npm.cmd run test:e2e` (8 passing across desktop/mobile).

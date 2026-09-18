@@ -1,6 +1,6 @@
-# แบบฝึก Bookmarks — เริ่มทีละส่วน
+# แบบฝึก Bookmarks - เริ่มทีละส่วน
 
-สถานะ 2026-09-17: bookmarkTitle และ bookmarkUrl พร้อม tests แล้ว หลังผู้พัฒนาขอให้ช่วยทำและดำเนินการต่อ ส่วน POST body, schema และ routes ยังเป็นงานถัดไป
+สถานะ 2026-09-18: แบบฝึกนี้ดำเนินการครบเป็น portfolio slice แล้ว รวม validation, POST body, schema, owner-scoped routes, tests และ UI ตามขอบเขตที่ยืนยันไว้
 
 ฐานตัวอย่างคือ commit `eef2562` ซึ่งมี Auth/Collections และผ่านการตรวจแล้ว ขั้นนี้ให้ผู้พัฒนาลงมือเอง โดย AI ช่วยอธิบาย ตรวจ และแก้เฉพาะจุด ยังไม่เปิด Bookmark API จนกว่าจะมี auth/ownership พร้อมกัน
 

@@ -8,7 +8,7 @@ export default function Workspace() {
     <Box component="nav" aria-label="เมนูหลัก" sx={{ alignSelf: 'start', position: { md: 'sticky' }, top: { md: 16 } }}><Stack direction={{ xs: 'row', md: 'column' }} spacing={0.5} sx={{ p: 0.5, bgcolor: { xs: 'background.paper', md: 'transparent' }, border: { xs: '1px solid', md: 'none' }, borderColor: 'divider', borderRadius: 2 }}>
       <Button component={Link} to="/bookmarks" variant={pathname === '/bookmarks' ? 'contained' : 'text'} fullWidth aria-current={pathname === '/bookmarks' ? 'page' : undefined}>ลิงก์ที่เก็บไว้</Button>
       <Button component={Link} to="/collections" variant={pathname === '/collections' ? 'contained' : 'text'} fullWidth aria-current={pathname === '/collections' ? 'page' : undefined}>กลุ่มของคุณ</Button>
-    </Stack><Typography variant="body2" color="text.secondary" sx={{ mt: 2, display: { xs: 'none', md: 'block' }, lineHeight: 1.7 }}>จัดเก็บลิงก์ส่วนตัวให้กลับมาอ่านได้ง่าย</Typography></Box>
+    </Stack><Typography variant="body2" color="text.secondary" sx={{ mt: 2, display: { xs: 'none', md: 'block' }, lineHeight: 1.7 }}>จัดเก็บลิงก์ส่วนตัวให้อ่านได้ง่าย</Typography></Box>
     <Box sx={{ minWidth: 0 }}><Suspense fallback={<LinearProgress aria-label="กำลังเปิดหน้า" />}><Routes>
       <Route path="/" element={<Navigate to="/bookmarks" replace />} />
       <Route path="/callback" element={<Navigate to="/bookmarks" replace />} />

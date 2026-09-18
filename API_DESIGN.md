@@ -1,6 +1,6 @@
-# API contract — ยืนยันแล้วใน Q15
+# API contract - ยืนยันแล้วใน Q15
 
-สถานะ: ผู้พัฒนายืนยัน contract ร่วมกับแผนเริ่มงานใน Q15 แล้ว ปัจจุบัน implement `GET /me` และ Collection CRUD พร้อม global auth guard แล้ว ส่วน Bookmarks, `GET /collections/:id/bookmarks` และการรักษา Bookmarks เมื่อลบ Collection ยังเป็น contract สำหรับบทความสัมพันธ์ถัดไป ไม่ถือว่าทำสเปกครบทั้งแอปแล้ว
+สถานะ: ผู้พัฒนายืนยัน contract ร่วมกับแผนเริ่มงานใน Q15 แล้ว ปัจจุบัน implement `GET /me`, Collection CRUD และ Bookmark CRUD พร้อม global auth guard, owner scope, nested collection reads และการปลดความสัมพันธ์เมื่อ Collection ถูกลบแล้ว
 
 ## Resources
 
@@ -72,8 +72,8 @@ ID ที่ไม่มีจริงและ ID ของผู้อื่�
 
 ## หลักฐานและข้อผิดพลาดจริง
 
-ผลและข้อจำกัดของ implementation อยู่ใน AI_WORKFLOW.md ปัจจุบันมี auth และ Collections tests ผ่าน HTTP กับฐานข้อมูลแยก ส่วน browser login เป็นผลที่ผู้พัฒนารายงานว่าสำเร็จ ยังไม่มีหลักฐานการทดสอบ Bookmark relations
+ผลและข้อจำกัดของ implementation อยู่ใน AI_WORKFLOW.md ปัจจุบันมี backend tests 52 รายการและ browser tests 8 รายการกับฐานข้อมูลแยก ส่วน browser login Auth0 จริงเป็นผลที่ผู้พัฒนารายงานว่าสำเร็จ ไม่ใช่ผลจาก browser agent
 
-## Superseding status — 2026-09-18
+## Superseding status - 2026-09-18
 
 The planned Bookmark stage is complete. The current implementation includes the Bookmark schema, owner-scoped routes, nested collection reads, validation, UI, and browser verification described in `docs/bookmark-exercise.md`. Earlier notes in this file describe the starting point and are retained as learning history.
